@@ -1,0 +1,57 @@
+.formsubmit{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+}
+
+.formsubmit input:hover{
+    background-color: #0056b3;
+    color: white;
+}
+
+.maindiv{
+    height: 350px;
+    width: 350px;
+    border: 1px solid grey;
+    border-radius: 10px;
+}
+
+.maindiv h1{
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+input{
+    height: 30px;
+    width: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    border: 1px solid grey;
+    border-radius: 7px;
+    padding-left: 6px;
+}
+
+/* Login page Design */
+.contentuser{
+    height: 450px;
+    width: 450px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 80px;
+    border-radius: 10px;
+    box-shadow: 0 3px 22px 0 rgba(0, 0, 0, 0.17);
+}
+
+.contentuser h4{
+    padding-top: 20px;
+}
+
+.contentuser label{
+    margin-left: 20px;
+    margin-top: 40px;
+    margin-bottom: -30px;
+}
