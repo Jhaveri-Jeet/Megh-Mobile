@@ -4,7 +4,7 @@ $range = isset($_GET['range']) ? $_GET['range'] : 10;
 
 if (isset($_GET['search'])) {
   $searchval = $_GET['search'];
-  $recordCountSql = "SELECT count(*) as Count FROM CustomerInfo WHERE CustomerName LIKE '%$searchval%'";
+  $recordCountSql = "SELECT count(*) as Count, CustomerInfo.Id FROM CustomerInfo WHERE CustomerName LIKE '%$searchval%'";
   $result = $connect->query($recordCountSql);
   $countRecord = $result->fetchAll(PDO::FETCH_ASSOC)[0]["Count"];
   $pageCount = $countRecord % $range == 0 ? ($countRecord / $range) : intval($countRecord / $range) + 1;
@@ -13,7 +13,7 @@ if (isset($_GET['search'])) {
   } else {
     $pageNo = $_GET["page"];
   }
-  $select = "SELECT Companies.CompanyName, Mobiles.MobileName, CustomerInfo.CustomerName, CustomerInfo.BillDate, CustomerInfo.EMIStartingDate, CustomerInfo.EMIMonths, CustomerInfo.Amount FROM CustomerInfo INNER JOIN Mobiles ON CustomerInfo.MobileId = Mobiles.Id INNER JOIN Companies ON Mobiles.CompanyId = Companies.Id WHERE CustomerInfo.CustomerName LIKE '%$searchval%' or CustomerInfo.BillDate LIKE '%$searchval%' or Companies.CompanyName LIKE '%$searchval%' or CustomerInfo.Amount LIKE '%$searchval%' or Mobiles.MobileName LIKE '%$searchval%' LIMIT " . (($pageNo - 1) * $range) . ",$range";
+  $select = "SELECT Companies.CompanyName, CustomerInfo.Id, Mobiles.MobileName, CustomerInfo.CustomerName, CustomerInfo.BillDate, CustomerInfo.EMIStartingDate, CustomerInfo.EMIMonths, CustomerInfo.Amount FROM CustomerInfo INNER JOIN Mobiles ON CustomerInfo.MobileId = Mobiles.Id INNER JOIN Companies ON Mobiles.CompanyId = Companies.Id WHERE CustomerInfo.CustomerName LIKE '%$searchval%' or CustomerInfo.BillDate LIKE '%$searchval%' or Companies.CompanyName LIKE '%$searchval%' or CustomerInfo.Amount LIKE '%$searchval%' or Mobiles.MobileName LIKE '%$searchval%' LIMIT " . (($pageNo - 1) * $range) . ",$range";
   $query = $connect->query($select);
   $result = $query->fetchAll(PDO::FETCH_ASSOC);
 } else {
@@ -26,7 +26,7 @@ if (isset($_GET['search'])) {
   } else {
     $pageNo = $_GET["page"];
   }
-  $select = "SELECT Companies.CompanyName, Mobiles.MobileName, CustomerInfo.CustomerName, CustomerInfo.BillDate, CustomerInfo.EMIStartingDate, CustomerInfo.EMIMonths, CustomerInfo.Amount FROM CustomerInfo INNER JOIN Mobiles ON CustomerInfo.MobileId = Mobiles.Id INNER JOIN Companies ON Mobiles.CompanyId = Companies.Id LIMIT " . (($pageNo - 1) * $range) . ",$range";
+  $select = "SELECT CustomerInfo.Id, Companies.CompanyName, Mobiles.MobileName, CustomerInfo.CustomerName, CustomerInfo.BillDate, CustomerInfo.EMIStartingDate, CustomerInfo.EMIMonths, CustomerInfo.Amount FROM CustomerInfo INNER JOIN Mobiles ON CustomerInfo.MobileId = Mobiles.Id INNER JOIN Companies ON Mobiles.CompanyId = Companies.Id WHERE CustomerInfo.Status = 'Pending' LIMIT " . (($pageNo - 1) * $range) . ",$range";
   $query = $connect->query($select);
   $result = $query->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -181,7 +181,7 @@ if (isset($_GET['search'])) {
                         <?= $ans['EMIMonths'] ?>
                       </td>
                       <td class="text-center">
-                        <a href="">
+                        <a href="../pages/ViewEMI.php?Id=<?= $ans['Id'] ?>">
                           <img src="../img/eye.png" alt="" height="10%" width="30px" title="View EMI">
                         </a>
                       </td>
