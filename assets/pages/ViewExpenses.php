@@ -1,7 +1,6 @@
 <?php
 include("../include/connection.php");
-$id = $_GET['Id'];
-$select = "SELECT * FROM EMI WHERE CustomerInfoId = $id && Status = 'Pending'";
+$select = "SELECT * FROM Expenses";
 $query = $connect->query($select);
 $result = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -33,13 +32,13 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                 <p>Add Expenses</p>
             </a>
         </li>
-        <li class="active">
+        <li>
             <a href="../pages/AllEMIs.php">
                 <i class="now-ui-icons business_globe"></i>
                 <p>All EMI</p>
             </a>
         </li>
-        <li>
+        <li class="active">
             <a href="../pages/ViewExpenses.php">
                 <i class="now-ui-icons business_money-coins"></i>
                 <p>All Expenses</p>
@@ -60,7 +59,7 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                         <span class="navbar-toggler-bar bar3"></span>
                     </button>
                 </div>
-                <a class="navbar-brand" href="../pages/AllEMIs.php">EMI List</a>
+                <a class="navbar-brand" href="../pages/AllEMIs.php">Expenses List</a>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -80,10 +79,10 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                 </form>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="../pages/AddEMI.php">
+                        <a class="nav-link" href="../pages/AddExpense.php">
                             <i class="now-ui-icons ui-1_simple-add" title="Add EMI"></i>
                             <p>
-                                <label>Add EMI</label>
+                                <label>Add Expense</label>
                             </p>
                         </a>
                     </li>
@@ -101,7 +100,7 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                     <div class="card-header">
                         <div class="row">
                             <div class="col-lg-10">
-                                <h4 class="card-title">Current EMI</h4>
+                                <h4 class="card-title">Current Expenses</h4>
                             </div>
                         </div>
                     </div>
@@ -110,38 +109,38 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                             <table class="table">
                                 <thead class="text-primary">
                                     <th class="text-center">
-                                        Date
+                                        Expense
                                     </th>
                                     <th class="text-center">
                                         Amount
                                     </th>
-                                    <th class="text-center">
-                                        Status
-                                    </th>
-                                    <th class="text-center">
+                                    <th class="text-center" colspan="2">
                                         Action
                                     </th>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($result as $ans) { ?>
-                                        <?php
-                                        $orgDate = $ans['EMIDueDate'];
-                                        $newDate = date("d-m-Y", strtotime($orgDate));
-                                        ?>
                                         <tr>
-                                            <input type="hidden" value="<?= $ans['EMIDueDate'] ?>" id="duedate">
-                                            <input type="hidden" value="<?= $_GET['Id'] ?>" id="customerid">
+                                            <input type="hidden" value="<?= $ans['Id'] ?>" id="expenseid">
                                             <td class="text-center">
-                                                <?= $newDate ?>
+                                                <input type="text" disabled value="<?= $ans['Expense'] ?>" id="expense" class="expenseinfo" style="background-color: transparent; border: none; display: block; margin-left: auto; margin-right: auto; text-align: center;">
                                             </td>
                                             <td class="text-center">
-                                                <?= $ans['DueAmount'] ?>
+                                                <input type="number" disabled value="<?= $ans['Amount'] ?>" id="amount" class="expenseinfo" style="background-color: transparent; border: none; display: block; margin-left: auto; margin-right: auto; text-align: center;">
+
                                             </td>
                                             <td class="text-center">
-                                                <?= $ans['Status'] ?>
+                                                <a onclick="showedit()" style="cursor: pointer;">
+                                                    <img src="../img/edit.png" alt="" height="10%" width="30px" id="edit" title="Edit Expense">
+                                                </a>
+                                                <a onclick="editexpense()" style="cursor: pointer;">
+                                                    <img src="../img/check.png" alt="" height="10%" width="30px" id="done" title="Edit Expense">
+                                                </a>
                                             </td>
                                             <td class="text-center">
-                                                <button type="submit" style="height: 30px; width: 60px; border: 1px solid grey; border-radius: 10px; background-color: green;color: white;" onclick="changeStatus()">Paid</button>
+                                                <a onclick="deleteexpense()" style="cursor: pointer;">
+                                                    <img src="../img/dustbin.png" alt="" height="10%" width="30px" title="Delete Expense">
+                                                </a>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -154,15 +153,44 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
             <?php include('../include/footer.php') ?>
             <?php include('../include/scripts.php') ?>
             <script>
-                function changeStatus() {
-                    let date = $('#duedate').val();
-                    let customerid = $('#customerid').val();
+                $('#done').hide();
+
+                function deleteexpense() {
+                    let expenseid = $('#expenseid').val();
                     let data = {
-                        date: date,
-                        customerid: customerid,
+                        expenseid: expenseid,
                     }
-                    $.post('../api/updateemi.php', data, function() {
+                    $.post('../api/deleteexpense.php', data, function() {
                         location.reload();
+                    })
+                }
+
+                function showedit() {
+                    $('#done').show();
+                    $('#edit').hide();
+                    $(".expenseinfo").removeAttr('disabled');
+                    $(".expenseinfo").css({
+                        "border": "1px solid grey"
+                    });
+                }
+
+                function editexpense() {
+                    let expense = $('#expense').val();
+                    let amount = $('#amount').val();
+                    let expenseid = $('#expenseid').val();
+                    let data = {
+                        expenseid: expenseid,
+                        expense: expense,
+                        amount: amount,
+                    }
+                    $.post('../api/updateexpense.php', data, function() {
+                        location.reload();
+                        $('#done').hide();
+                        $('#edit').show();
+                        $(".expenseinfo").prop('disabled');
+                        $(".expenseinfo").css({
+                            "border": "none"
+                        });
                     })
                 }
             </script>

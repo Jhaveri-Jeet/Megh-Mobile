@@ -34,5 +34,3 @@ for ($i = 0; $i < $emiMonths; $i++) {
 header("Content-type:application/json");
 echo json_encode($queryInsert);
 $connect = null;
-
-?>

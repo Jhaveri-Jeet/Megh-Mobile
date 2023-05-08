@@ -8,7 +8,7 @@
         <p>Dashboard</p>
       </a>
     </li>
-    <li class="active">
+    <li>
       <a href="../pages/AddCompany.php">
         <i class="now-ui-icons ui-1_simple-add"></i>
         <p>Add Company</p>
@@ -20,7 +20,7 @@
         <p>Add Mobiles</p>
       </a>
     </li>
-    <li>
+    <li class="active">
       <a href="../pages/AddExpense.php">
         <i class="now-ui-icons ui-1_simple-add"></i>
         <p>Add Expenses</p>
@@ -53,7 +53,7 @@
             <span class="navbar-toggler-bar bar3"></span>
           </button>
         </div>
-        <a class="navbar-brand" href="#pablo">Add Company</a>
+        <a class="navbar-brand" href="#pablo">Add Expense</a>
       </div>
   </nav>
   <!-- End Navbar -->
@@ -64,26 +64,32 @@
       <div class="col-md-8">
         <div class="card">
           <div class="card-header">
-            <h5 class="title">Add Company</h5>
+            <h5 class="title">Add Expense</h5>
           </div>
           <div class="card-body">
             <form>
               <div class="row">
-                <div class="col-md-3 pr-1">
+                <div class="col-md-10 pr-1">
                   <div class="form-group">
                     <label>Company</label>
-                    <input type="text" class="form-control" disabled="" placeholder="Company" value="MEGH Enterprise">
+                    <input type="text" class="form-control" disabled placeholder="Company" value="MEGH Enterprise">
                   </div>
                 </div>
-                <div class="col-md-5 px-1">
+                <div class="col-md-5 px-2 py-3">
                   <div class="form-group">
-                    <label>Company Name</label>
-                    <input type="text" class="form-control" placeholder="Enter Company Name : " name="CompanyName" id="companyname" tabindex="1">
+                    <label>Expense Name</label>
+                    <input type="text" class="form-control" placeholder="Enter Expense Name : " name="ExpenseName" id="expensename" tabindex="1">
                   </div>
                 </div>
-                <div class="formsubmit" style="padding-top: 14px;">
+                <div class="col-md-5 px-2 py-3">
                   <div class="form-group">
-                    <input type="button" class="form-control" value="Add Company" tabindex="2" onclick="sendData()">
+                    <label>Amount</label>
+                    <input type="number" class="form-control" placeholder="Enter Amount : " name="amount" id="amount" tabindex="1">
+                  </div>
+                </div>
+                <div class="formsubmit" style="padding-top: 28px;">
+                  <div class="form-group">
+                    <input type="button" class="form-control" value="Add Expense" tabindex="2" onclick="sendData()">
                   </div>
                 </div>
             </form>
@@ -94,12 +100,15 @@
 
       <script>
         function sendData() {
-          let companyname = $("#companyname").val();
+          let expensename = $("#expensename").val();
+          let amount = $("#amount").val();
           let data = {
-            companyname: companyname,
+            expensename: expensename,
+            amount: amount,
           }
-          $.post('../api/insertcompany.php', data, function(response) {
-            $("#companyname").val('');
+          $.post('../api/insertexpense.php', data, function(response) {
+            $("#expensename").val('');
+            $("#amount").val('');
             window.location.reload()
           })
         }

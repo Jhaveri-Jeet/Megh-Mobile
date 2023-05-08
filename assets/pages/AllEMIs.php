@@ -53,10 +53,22 @@ if (isset($_GET['search'])) {
         <p>Add Mobiles</p>
       </a>
     </li>
+    <li>
+      <a href="../pages/AddExpense.php">
+        <i class="now-ui-icons ui-1_simple-add"></i>
+        <p>Add Expenses</p>
+      </a>
+    </li>
     <li class="active">
       <a href="../pages/AllEMIs.php">
         <i class="now-ui-icons business_globe"></i>
         <p>All EMI</p>
+      </a>
+    </li>
+    <li>
+      <a href="../pages/ViewExpenses.php">
+        <i class="now-ui-icons business_money-coins"></i>
+        <p>All Expenses</p>
       </a>
     </li>
   </ul>
