@@ -4,10 +4,6 @@ $select = "SELECT COUNT(Companies.CompanyName) as COUNT, Companies.CompanyName, 
 $query = $connect->query($select);
 $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
-$selectmodels = "SELECT Companies.CompanyName, SUM(CustomerInfo.Profit) as TotalProfitFromCompany FROM CustomerInfo INNER JOIN Companies ON CustomerInfo.CompanyId = Companies.Id";
-$querymodels = $connect->query($selectmodels);
-$resultModel = $querymodels->fetchAll(PDO::FETCH_ASSOC);
-
 $selectprofit = "SELECT SUM(CustomerInfo.Profit) as TotalProfit FROM CustomerInfo";
 $queryprofit = $connect->query($selectprofit);
 $resultprofit = $queryprofit->fetch();
@@ -15,6 +11,15 @@ $resultprofit = $queryprofit->fetch();
 $selectsales = "SELECT SUM(CustomerInfo.Amount) as TotalSales FROM CustomerInfo";
 $querysales = $connect->query($selectsales);
 $resultsales = $querysales->fetch();
+
+$selectexpenses = "SELECT Expenses.Expense, Expenses.Amount FROM Expenses";
+$queryexpense = $connect->query($selectexpenses);
+$resultexpenses = $queryexpense->fetchAll();
+
+$selecttotalexpenses = "SELECT SUM(Expenses.Amount) as TotalExpense FROM Expenses";
+$querytotalexpense = $connect->query($selecttotalexpenses);
+$resulttotalexpenses = $querytotalexpense->fetch();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,9 +73,21 @@ $resultsales = $querysales->fetch();
             </a>
           </li>
           <li>
+            <a href="../pages/AddExpense.php">
+              <i class="now-ui-icons ui-1_simple-add"></i>
+              <p>Add Expenses</p>
+            </a>
+          </li>
+          <li>
             <a href="../pages/AllEMIs.php">
               <i class="now-ui-icons business_globe"></i>
               <p>All EMI</p>
+            </a>
+          </li>
+          <li>
+            <a href="../pages/ViewExpenses.php">
+              <i class="now-ui-icons business_money-coins"></i>
+              <p>All Expenses</p>
             </a>
           </li>
         </ul>
@@ -217,31 +234,39 @@ $resultsales = $querysales->fetch();
           <div class="col-md-4">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-category" style="font-weight: bold;">Total Profit &nbsp: <?= $resultprofit['TotalProfit'] ?></h5>
-                <h4 class="card-title">Profit on Companies</h4>
+                <h5 class="card-category" style="font-weight: bold;">Profit &nbsp: <?= $resultprofit['TotalProfit'] ?></h5>
+                <h4 class="card-title">Expenses </h4>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table">
                     <thead class=" text-primary">
                       <th>
-                        Company Name
+                        Expenses
                       </th>
                       <th>
-                        Total Profit
+                        Amount
                       </th>
                     </thead>
                     <tbody>
-                      <?php foreach ($resultModel as $ans) { ?>
+                      <?php foreach ($resultexpenses as $ans) { ?>
                         <tr>
                           <td>
-                            <?= $ans['CompanyName'] ?>
+                            <?= $ans['Expense'] ?>
                           </td>
                           <td>
-                            <?= $ans['TotalProfitFromCompany'] ?>
+                            <?= $ans['Amount'] ?>
                           </td>
                         </tr>
                       <?php } ?>
+                      <tr>
+                        <td style="font-weight: bolder;">
+                          Total Profit
+                        </td>
+                        <td>
+                          <?= $resultprofit['TotalProfit'] - $resulttotalexpenses['TotalExpense'] ?>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>

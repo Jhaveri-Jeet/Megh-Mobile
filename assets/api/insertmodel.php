@@ -8,4 +8,3 @@ $query = $connect->query($insert);
 header('Content-type:application/json');
 header("Location: ../pages/AddMobile.php");
 $connect = null;
-?>

@@ -26,9 +26,21 @@ $companynames = $query->fetchAll(PDO::FETCH_ASSOC);
       </a>
     </li>
     <li>
+      <a href="../pages/AddExpense.php">
+        <i class="now-ui-icons ui-1_simple-add"></i>
+        <p>Add Expenses</p>
+      </a>
+    </li>
+    <li>
       <a href="../pages/AllEMIs.php">
         <i class="now-ui-icons business_globe"></i>
         <p>All EMI</p>
+      </a>
+    </li>
+    <li>
+      <a href="../pages/ViewExpenses.php">
+        <i class="now-ui-icons business_money-coins"></i>
+        <p>All Expenses</p>
       </a>
     </li>
   </ul>
@@ -71,7 +83,6 @@ $companynames = $query->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-md-10 px-3 py-5">
                   <div class="form-group">
                     <label>Company Name</label>
-                    <!-- <input list="Company-list" id="companyid" placeholder="Search your Company : "> -->
                     <select id="companyid" style="height: 10%; width: 30%">
                       <?php foreach ($companynames as $companyname) { ?>
                         <option value="<?= $companyname['Id'] ?>" style="color: grey;"><?= $companyname['CompanyName'] ?></option>
@@ -87,7 +98,7 @@ $companynames = $query->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="formsubmit" style="padding-top: 12px;">
                   <div class="form-group">
-                    <input type="submit" class="form-control" value="Add Model" onclick="sendData()">
+                    <input type="button" class="form-control" value="Add Model" onclick="sendData()">
                   </div>
                 </div>
             </form>
@@ -97,15 +108,15 @@ $companynames = $query->fetchAll(PDO::FETCH_ASSOC);
       <?php include('../include/footer.php') ?>
       <script>
         function sendData() {
-          let companyid = $("#companyid").val();
+          let companyid = $("#companyid option:selected").val();
           let modelname = $('#modelname').val();
           let data = {
             companyid: companyid,
             modelname: modelname
           }
-
-          $.post('../api/insertmodel.php', data, function(result) {
-            console.log(result);
+          $.post('../api/insertmodel.php', data, function(response) {
+            $('#modelname').val('');
+            window.location.reload();
           })
         }
       </script>
