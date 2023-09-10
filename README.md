@@ -1,5 +1,7 @@
 # Megh Mobile EMI Management Software
 
+![Screenshot 2023-09-10 193312](https://github.com/Jhaveri-Jeet/Megh-Mobile/assets/114752089/33c23533-a8b4-4062-a763-06c8211879a0)
+
 ## Overview
 
 Megh Mobile is an EMI management software designed for businesses engaged in selling mobile phones through installment payment plans. This software streamlines the management of customer information, payment scheduling, EMI tracking, and expense tracking, enabling businesses to efficiently handle their EMI operations.
